@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.uniandes.lmax.models.TraceEvent;
+import com.uniandes.lmax.events.ProcessorEvent;
 import com.uniandes.lmax.services.ReceptionerService;
 
 /**
@@ -22,7 +22,7 @@ public class ReceiverController {
 		
 	@Autowired
 	private ReceptionerService receptionerService;
-	
+		
 	/**
 	 *
 	 * @param message the message
@@ -32,7 +32,7 @@ public class ReceiverController {
 	 */
     @RequestMapping(value = "/receiver", method = RequestMethod.POST)
     @ResponseBody
-    TraceEvent encode(@RequestBody TraceEvent trace) throws JsonParseException, JsonMappingException, IOException {
+    ProcessorEvent encode(@RequestBody ProcessorEvent trace) throws JsonParseException, JsonMappingException, IOException {
     	
     	this.receptionerService.recepcionerTrace(trace);
     	
