@@ -7,8 +7,12 @@ import org.springframework.scheduling.annotation.Async;
 import com.lmax.disruptor.EventHandler;
 import com.uniandes.lmax.events.NotificationEvent;
 
+import java.sql.Timestamp;
+
 public class NotificationEventHandler implements EventHandler<NotificationEvent>
 {
+	private static int counter = 0;
+
 	/**
 	 * LOGGER
 	 */
@@ -17,12 +21,14 @@ public class NotificationEventHandler implements EventHandler<NotificationEvent>
 	public void onEvent(NotificationEvent event, long sequence, boolean endOfBatch)
     {
 		sendNotifications(event);
-		LOGGER.info("notificationHandler enter and phone is: {}", event.getPhone());
+		counter++;
+		if(counter % 500 == 0)
+		LOGGER.info("counter: {} not: {}", counter, new Timestamp(System.currentTimeMillis()));
     }
 	
 	@Async
-	private void sendNotifications(NotificationEvent event)
+	void sendNotifications(NotificationEvent event)
     {
-		LOGGER.info("Sending notification");
+
     }
 }

@@ -1,4 +1,5 @@
 package com.uniandes.lmax.events.handler;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -19,13 +20,18 @@ public class ProcessorEventHandler implements EventHandler<ProcessorEvent>
 	 * LOGGER
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProcessorEventHandler.class);
+
+	private static int counter = 0;
 	
 	public void onEvent(ProcessorEvent processorEvent, long sequence, boolean endOfBatch)
     {
     	if(processorEvent.isAlert()){
     		NotificationEvent notificationEvent = verifySensorList(processorEvent);    		
     		if(notificationEvent != null) {
-    			LOGGER.info("notificationEvent is not null and phone is: {}", notificationEvent.getPhone());
+				counter++;
+    			if(counter == 1 || counter % 500 == 1)
+    				LOGGER.info("counter: {} proc: {}", counter, new Timestamp(System.currentTimeMillis()));
+
     			EventTranslator<NotificationEvent> notificationEventTranslator = new NotificationEventTranslator(notificationEvent);
     			processorEvent.getRingBufferNotification().publishEvent(notificationEventTranslator);
 			}    	
@@ -34,7 +40,6 @@ public class ProcessorEventHandler implements EventHandler<ProcessorEvent>
 	
 	public NotificationEvent verifySensorList(ProcessorEvent processorEvent)
     {
-		//LOGGER.info("Log SensorList: {}", sensorList);		
 		HashSet<NotificationType> notificationTypeHash = new HashSet<NotificationType>();
 		int sensorCounter = 0;
 		for (Boolean sensor : processorEvent.getSensorList()) {
