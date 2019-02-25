@@ -10,6 +10,11 @@
   <name>lmax</name>
   <url>http://maven.apache.org</url>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<maven.compiler.source>1.7.0_201</maven.compiler.source>
+	<maven.compiler.target>1.7.0_201</maven.compiler.target>
+  </properties>
   <build>
     <defaultGoal>install</defaultGoal>
   </build>
